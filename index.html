@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>萬聖節 Music Bingo | Flow with the Goal Special</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --bg: #0d0a0f;
+      --card: #1a1220;
+      --orange: #ff6b1a;
+      --orange-soft: #ff8c42;
+      --purple: #7b2cbf;
+      --text: #f5e6d3;
+      --muted: #a89b8c;
+      --success: #3dd68c;
+      --danger: #ff4d6d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang HK", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+      background-image:
+        radial-gradient(ellipse at 20% 10%, rgba(123, 44, 191, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 90%, rgba(255, 107, 26, 0.15) 0%, transparent 50%);
+    }
+
+    .container {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 20px 16px 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .pumpkin {
+      font-size: 48px;
+      animation: float 3s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--orange);
+      margin: 10px 0 4px;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--purple), #9b4dca);
+      color: white;
+      font-size: 0.75rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-top: 8px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(255, 107, 26, 0.25);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    .card h2 {
+      font-size: 1.05rem;
+      color: var(--orange-soft);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rules {
+      font-size: 0.9rem;
+    }
+
+    .rules ul {
+      padding-left: 18px;
+      margin: 8px 0;
+    }
+
+    .rules li {
+      margin-bottom: 6px;
+    }
+
+    .prize {
+      background: rgba(255, 107, 26, 0.12);
+      border: 1px dashed var(--orange);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-top: 12px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .prize strong {
+      color: var(--orange);
+    }
+
+    .tip {
+      background: rgba(123, 44, 191, 0.15);
+      border-left: 3px solid var(--purple);
+      border-radius: 0 10px 10px 0;
+      padding: 10px 12px;
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: #d4c4e8;
+    }
+
+    .song-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .input-row span {
+      width: 24px;
+      height: 24px;
+      background: var(--purple);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: #120c18;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 11px 14px;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--orange);
+    }
+
+    input[type="text"]::placeholder {
+      color: #6b5e52;
+    }
+
+    .name-row {
+      margin-bottom: 14px;
+    }
+
+    .name-row label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 13px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+      margin-top: 12px;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--orange), #e85d04);
+      color: #1a0a00;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .btn-share {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: white;
+      margin-top: 10px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .btn-group .btn {
+      margin-top: 0;
+      flex: 1;
+    }
+
+    /* My picks */
+    .picks-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .pick-item {
+      background: #120c18;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.25s;
+    }
+
+    .pick-item.matched {
+      border-color: var(--success);
+      background: rgba(61, 214, 140, 0.12);
+    }
+
+    .pick-item .num {
+      width: 26px;
+      height: 26px;
+      background: var(--purple);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .pick-item.matched .num {
+      background: var(--success);
+      color: #0a1f14;
+    }
+
+    .pick-item .name {
+      flex: 1;
+      font-size: 0.95rem;
+    }
+
+    .pick-item .check {
+      font-size: 1.2rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .pick-item.matched .check {
+      opacity: 1;
+    }
+
+    /* Played */
+    .played-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      min-height: 36px;
+    }
+
+    .played-tag {
+      background: rgba(255, 107, 26, 0.15);
+      border: 1px solid rgba(255, 107, 26, 0.4);
+      color: var(--orange-soft);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .played-tag button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.95rem;
+      line-height: 1;
+      padding: 0 2px;
+    }
+
+    .add-played {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .add-played input {
+      flex: 1;
+    }
+
+    .add-played button {
+      width: auto;
+      padding: 11px 16px;
+      margin-top: 0;
+      white-space: nowrap;
+    }
+
+    .status-box {
+      text-align: center;
+      padding: 14px;
+      border-radius: 12px;
+      margin-top: 14px;
+      font-weight: 600;
+      display: none;
+    }
+
+    .status-box.show {
+      display: block;
+    }
+
+    .status-box.bingo {
+      background: linear-gradient(135deg, rgba(61,214,140,0.2), rgba(61,214,140,0.08));
+      border: 1px solid var(--success);
+      color: var(--success);
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    .status-box.almost {
+      background: rgba(255, 140, 66, 0.12);
+      border: 1px solid var(--orange-soft);
+      color: var(--orange-soft);
+    }
+
+    .status-box.progress {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--muted);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    .progress-count {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 0.75rem;
+      color: #5a4e45;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .celebrate {
+      font-size: 1.8rem;
+      margin-bottom: 4px;
+    }
+
+    /* Share card (for image generation) */
+    #shareCard {
+      position: fixed;
+      left: -9999px;
+      top: 0;
+      width: 400px;
+      background: #120c18;
+      border-radius: 20px;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang HK", "Noto Sans TC", sans-serif;
+    }
+
+    .share-inner {
+      padding: 24px 20px 20px;
+      background: linear-gradient(160deg, #1a1220 0%, #120c18 100%);
+      border: 2px solid rgba(255, 107, 26, 0.4);
+      border-radius: 20px;
+    }
+
+    .share-header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .share-header .emoji {
+      font-size: 36px;
+    }
+
+    .share-header h3 {
+      color: #ff6b1a;
+      font-size: 1.1rem;
+      margin: 6px 0 2px;
+    }
+
+    .share-header p {
+      color: #a89b8c;
+      font-size: 0.8rem;
+    }
+
+    .share-name {
+      text-align: center;
+      background: rgba(123, 44, 191, 0.25);
+      border-radius: 10px;
+      padding: 8px;
+      margin-bottom: 14px;
+      color: #e0d0f0;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .share-songs {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .share-song {
+      background: #1a1220;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #f5e6d3;
+      font-size: 0.95rem;
+    }
+
+    .share-song .n {
+      width: 24px;
+      height: 24px;
+      background: #7b2cbf;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .share-footer {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.75rem;
+      color: #6b5e52;
+    }
+
+    .share-hint {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="pumpkin">🎃</div>
+      <h1>Flow with the Goal Special</h1>
+      <p class="subtitle">Music Show Bingo</p>
+      <span class="badge">萬聖節專場 · 全廣東歌</span>
+    </header>
+
+    <!-- Rules -->
+    <div class="card">
+      <h2>🦇 遊戲規則</h2>
+      <div class="rules">
+        <ul>
+          <li>今晚會播 <strong>11 隻</strong>廣東歌</li>
+          <li>每人可以交出 <strong>5 首歌</strong></li>
+          <li><strong>全中 5 首</strong>即可獲獎（不分次序）</li>
+          <li>如果冇人中 5 首，<strong>中 4 首</strong>都可以獲獎</li>
+        </ul>
+        <div class="prize">
+          🏆 勝出者將會得到<br>
+          <strong>寫咗抬頭嘅「失眠藥」萬聖節專屬賀卡！</strong>
+        </div>
+        <div class="tip">
+          💡 貼士：請避免揀 <strong>K歌、情歌、慢歌</strong> 向嘅歌～
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1: Enter name + 5 songs -->
+    <div class="card" id="setupCard">
+      <h2>📝 輸入你的選擇</h2>
+      
+      <div class="name-row">
+        <label>你的名字 / 暱稱（方便得獎時認人）</label>
+        <input type="text" id="playerName" placeholder="例如：Peggy / Anthony / 莫言憂" maxlength="20" />
+      </div>
+
+      <div class="song-inputs">
+        <div class="input-row">
+          <span>1</span>
+          <input type="text" id="song1" placeholder="歌名" maxlength="40" />
+        </div>
+        <div class="input-row">
+          <span>2</span>
+          <input type="text" id="song2" placeholder="歌名" maxlength="40" />
+        </div>
+        <div class="input-row">
+          <span>3</span>
+          <input type="text" id="song3" placeholder="歌名" maxlength="40" />
+        </div>
+        <div class="input-row">
+          <span>4</span>
+          <input type="text" id="song4" placeholder="歌名" maxlength="40" />
+        </div>
+        <div class="input-row">
+          <span>5</span>
+          <input type="text" id="song5" placeholder="歌名" maxlength="40" />
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="lockPicks()">鎖定我的選擇 🔒</button>
+    </div>
+
+    <!-- Step 2: My card + played -->
+    <div class="card hidden" id="playCard">
+      <h2>🎯 <span id="displayName">我的</span> Bingo 卡</h2>
+      <div class="picks-grid" id="picksDisplay"></div>
+
+      <div class="status-box progress" id="statusBox">
+        <div id="statusText">已中 0 / 5</div>
+        <div class="progress-count" id="progressDetail">繼續聽歌，等全中！</div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="saveAsImage()">📷 儲存圖片</button>
+        <button class="btn btn-share" onclick="shareCard()">分享出去</button>
+      </div>
+      <p class="share-hint">儲存後可以傳去群組，等大家一齊睇！</p>
+
+      <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 20px 0;" />
+
+      <h2>🎵 已播放歌曲</h2>
+      <div class="played-list" id="playedList">
+        <span style="color: var(--muted); font-size: 0.85rem;">尚未開始...</span>
+      </div>
+
+      <div class="add-played">
+        <input type="text" id="newPlayed" placeholder="輸入剛播嘅歌名" maxlength="40" />
+        <button class="btn btn-primary" onclick="addPlayed()">加入</button>
+      </div>
+
+      <button class="btn btn-secondary" onclick="resetAll()" style="margin-top: 16px;">重新開始</button>
+    </div>
+
+    <footer>
+      🎃 Happy Halloween · Flow with the Goal Special 🦇
+    </footer>
+  </div>
+
+  <!-- Hidden card for image export -->
+  <div id="shareCard">
+    <div class="share-inner">
+      <div class="share-header">
+        <div class="emoji">🎃🦇</div>
+        <h3>Music Show Bingo</h3>
+        <p>Flow with the Goal · 萬聖節專場</p>
+      </div>
+      <div class="share-name" id="shareName">我的 Bingo 卡</div>
+      <div class="share-songs" id="shareSongs"></div>
+      <div class="share-footer">全中 5 首 / 冇人中則 4 首都得 · 失眠藥專屬賀卡</div>
+    </div>
+  </div>
+
+  <script>
+    let myPicks = [];
+    let playedSongs = [];
+    let playerName = '';
+
+    function normalize(str) {
+      return str.trim().toLowerCase().replace(/\s+/g, '');
+    }
+
+    function lockPicks() {
+      playerName = document.getElementById('playerName').value.trim() || '神秘玩家';
+      const inputs = [
+        document.getElementById('song1').value,
+        document.getElementById('song2').value,
+        document.getElementById('song3').value,
+        document.getElementById('song4').value,
+        document.getElementById('song5').value
+      ];
+
+      const filled = inputs.filter(s => s.trim() !== '');
+      if (filled.length < 5) {
+        alert('請填齊 5 首歌！');
+        return;
+      }
+
+      const norms = filled.map(normalize);
+      if (new Set(norms).size !== 5) {
+        alert('唔可以有重複歌名喔～');
+        return;
+      }
+
+      myPicks = filled.map(s => s.trim());
+      document.getElementById('setupCard').classList.add('hidden');
+      document.getElementById('playCard').classList.remove('hidden');
+      document.getElementById('displayName').textContent = playerName + ' 的';
+      renderPicks();
+      updateStatus();
+      prepareShareCard();
+    }
+
+    function renderPicks() {
+      const container = document.getElementById('picksDisplay');
+      container.innerHTML = myPicks.map((name, i) => {
+        const isMatched = playedSongs.some(p => normalize(p) === normalize(name));
+        return `
+          <div class="pick-item ${isMatched ? 'matched' : ''}">
+            <div class="num">${i + 1}</div>
+            <div class="name">${name}</div>
+            <div class="check">✅</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function prepareShareCard() {
+      document.getElementById('shareName').textContent = playerName + ' 的 Bingo 卡';
+      document.getElementById('shareSongs').innerHTML = myPicks.map((name, i) => `
+        <div class="share-song">
+          <div class="n">${i + 1}</div>
+          <div>${name}</div>
+        </div>
+      `).join('');
+    }
+
+    function addPlayed() {
+      const input = document.getElementById('newPlayed');
+      const song = input.value.trim();
+      if (!song) return;
+
+      if (playedSongs.some(p => normalize(p) === normalize(song))) {
+        alert('呢首歌已經加咗啦！');
+        input.value = '';
+        return;
+      }
+
+      playedSongs.push(song);
+      input.value = '';
+      renderPlayed();
+      renderPicks();
+      updateStatus();
+    }
+
+    document.getElementById('newPlayed').addEventListener('keydown', e => {
+      if (e.key === 'Enter') addPlayed();
+    });
+
+    ['song1','song2','song3','song4','song5'].forEach((id, idx) => {
+      document.getElementById(id).addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          if (idx < 4) document.getElementById('song' + (idx + 2)).focus();
+          else lockPicks();
+        }
+      });
+    });
+
+    document.getElementById('playerName').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('song1').focus();
+    });
+
+    function renderPlayed() {
+      const list = document.getElementById('playedList');
+      if (playedSongs.length === 0) {
+        list.innerHTML = '<span style="color: var(--muted); font-size: 0.85rem;">尚未開始...</span>';
+        return;
+      }
+      list.innerHTML = playedSongs.map((s, i) => `
+        <div class="played-tag">
+          ${s}
+          <button onclick="removePlayed(${i})" title="移除">×</button>
+        </div>
+      `).join('');
+    }
+
+    function removePlayed(index) {
+      playedSongs.splice(index, 1);
+      renderPlayed();
+      renderPicks();
+      updateStatus();
+    }
+
+    function updateStatus() {
+      const matchedCount = myPicks.filter(pick =>
+        playedSongs.some(p => normalize(p) === normalize(pick))
+      ).length;
+
+      const box = document.getElementById('statusBox');
+      const text = document.getElementById('statusText');
+      const detail = document.getElementById('progressDetail');
+
+      box.classList.add('show');
+      box.classList.remove('bingo', 'almost', 'progress');
+
+      if (matchedCount === 5) {
+        box.classList.add('bingo');
+        text.innerHTML = '<div class="celebrate">🎉🏆🎉</div>Bingo！全中 5 首！';
+        detail.textContent = '恭喜你贏得「失眠藥」萬聖節專屬賀卡！';
+      } else if (matchedCount === 4) {
+        box.classList.add('almost');
+        text.innerHTML = '🔥 已中 4 / 5';
+        detail.textContent = '如果冇人全中，你都可以獲獎！';
+      } else {
+        box.classList.add('progress');
+        text.textContent = `已中 ${matchedCount} / 5`;
+        detail.textContent = matchedCount === 0
+          ? '繼續聽歌，等全中！'
+          : `仲差 ${5 - matchedCount} 首就全中！`;
+      }
+    }
+
+    async function saveAsImage() {
+      const card = document.getElementById('shareCard');
+      // Temporarily move into view for rendering
+      card.style.left = '0';
+      card.style.top = '0';
+      card.style.zIndex = '-1';
+      card.style.opacity = '0';
+
+      try {
+        const canvas = await html2canvas(card, {
+          backgroundColor: '#120c18',
+          scale: 2,
+          useCORS: true,
+          logging: false
+        });
+
+        const link = document.createElement('a');
+        link.download = `Bingo_${playerName || 'card'}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (err) {
+        alert('儲存失敗，請試下用手機截圖代替～');
+        console.error(err);
+      }
+
+      // Hide again
+      card.style.left = '-9999px';
+      card.style.opacity = '1';
+    }
+
+    async function shareCard() {
+      const card = document.getElementById('shareCard');
+      card.style.left = '0';
+      card.style.top = '0';
+      card.style.zIndex = '-1';
+      card.style.opacity = '0';
+
+      try {
+        const canvas = await html2canvas(card, {
+          backgroundColor: '#120c18',
+          scale: 2,
+          useCORS: true,
+          logging: false
+        });
+
+        card.style.left = '-9999px';
+        card.style.opacity = '1';
+
+        canvas.toBlob(async (blob) => {
+          const file = new File([blob], `Bingo_${playerName || 'card'}.png`, { type: 'image/png' });
+
+          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+              await navigator.share({
+                files: [file],
+                title: '我的 Music Bingo 卡',
+                text: `${playerName} 的萬聖節 Music Bingo 選擇！`
+              });
+            } catch (e) {
+              // User cancelled or failed → fallback to download
+              const link = document.createElement('a');
+              link.download = file.name;
+              link.href = URL.createObjectURL(blob);
+              link.click();
+            }
+          } else {
+            // Fallback: download
+            const link = document.createElement('a');
+            link.download = file.name;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            alert('已下載圖片！可以手動傳到群組分享～');
+          }
+        }, 'image/png');
+      } catch (err) {
+        card.style.left = '-9999px';
+        card.style.opacity = '1';
+        alert('分享失敗，請試下用「儲存圖片」再手動分享～');
+        console.error(err);
+      }
+    }
+
+    function resetAll() {
+      if (!confirm('確定要重新開始？你嘅選擇同已播放記錄都會清咗。')) return;
+      myPicks = [];
+      playedSongs = [];
+      playerName = '';
+      document.getElementById('setupCard').classList.remove('hidden');
+      document.getElementById('playCard').classList.add('hidden');
+      document.getElementById('playerName').value = '';
+      ['song1','song2','song3','song4','song5'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('newPlayed').value = '';
+    }
+  </script>
+</body>
+</html>
